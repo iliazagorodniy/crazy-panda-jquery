@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Title</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <style type="text/css">
+            #output
+            {
+                height: 400px;
+                border: solid 1px #ccc;
+            }
+            #redslide, #greenslide, #blueslide
+            {
+                height: 15px;
+                margin: 10px 0px;
+                width: 350px;
+            }
+
+            #redslide .ui-slider-range
+            {
+                background: red;
+            }
+            #redslide .ui-slider-handle
+            {
+                border-color: red;
+            }
+            #greenslide .ui-slider-range
+            {
+                background: green;
+            }
+            #greenslide .ui-slider-handle
+            {
+                border-color: green;
+            }
+            #blueslide .ui-slider-range
+            {
+                background: blue;
+            }
+            #blueslide .ui-slider-handle
+            {
+                border-color: blue;
+            }
+        </style>
+        <script>
+		    $(document).ready(function () {
+			    $( "#tabs" ).tabs({
+				    active: 1
+			    });
+
+			    $("#redslide, #greenslide, #blueslide").slider({
+				    orientation: "horizontal",
+				    range: "min",
+				    max: 255,
+				    value: 127,
+				    slide: showOutput,
+				    change: showOutput
+			    });
+			    $("#redslide").slider("value", 42);
+			    $("#greenslide").slider("value", 42);
+			    $("#blueslide").slider("value", 42);
+		    });
+
+		    function showOutput() {
+			    var hexa = getHexaFromRGB(
+			    	$("#redslide").slider("value"),
+				    $("#greenslide").slider("value"),
+				    $("#blueslide").slider("value")
+                );
+			    var activeTab = $( "#tabs" ).tabs( "option", "active" );
+			    if (activeTab === 0) {
+				    $("#output").css("background-color", "#" + hexa);
+                } else {
+			        $("#output-text").css("color", "#" + hexa);
+                }
+                // Setter
+			    // $( ".selector" ).tabs( "option", "active", 1 );
+		    }
+
+		    function getHexaFromRGB(r, g, b) {
+			    var hexa = [r.toString(16), g.toString(16), b.toString(16)];
+			    $.each(hexa, function (nr, val) {
+				    if (val.length === 1) {
+					    hexa[nr] = "0" + val;
+				    }
+			    });
+			    return hexa.join("").toUpperCase();
+		    }
+        </script>
+    </head>
+        <body>
+            <div id="tabs">
+                <ul>
+                    <li><a href="#fragment-1">BG</a></li>
+                    <li><a href="#fragment-2">Text</a></li>
+                </ul>
+                <div id="fragment-1">
+                    Background color change mode
+                </div>
+                <div id="fragment-2">
+                    Text color change mode
+                </div>
+                <div id="output">
+                    <h1 id="output-text">lorem ipsum1</h1>
+                </div>
+                <div id="redslide"></div>
+                <div id="greenslide"></div>
+                <div id="blueslide"></div>
+            </div>
+        </body>
+</html>
